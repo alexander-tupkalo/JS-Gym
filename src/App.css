@@ -10,6 +10,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--bg-primary);
 }
 
 .app-main {
@@ -753,7 +754,7 @@
   font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
   font-size: 0.82rem;
   line-height: 1.7;
-  color: var(--text-primary);
+  color: var(--bg-card);
   background-color: transparent;
   border: none;
   outline: none;
@@ -1112,6 +1113,7 @@
 .hint-text {
   font-size: 0.85rem;
   color: var(--text-secondary);
+  background-color: var(--text-muted);
   line-height: 1.65;
   white-space: pre-wrap;
   word-break: break-word;
