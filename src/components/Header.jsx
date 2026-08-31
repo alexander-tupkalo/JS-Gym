@@ -3,7 +3,7 @@ function Header({ onToggleSidebar, onGoHome, theme, onToggleTheme, view, onGoToT
     <header className="header">
       <div className="header-inner">
         <div className="header-left">
-          {view === 'training' && (
+          {(view === 'training' || view === 'theory') && (
             <button
               className="header-toggle"
               onClick={onToggleSidebar}

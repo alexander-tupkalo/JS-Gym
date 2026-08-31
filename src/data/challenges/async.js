@@ -14,6 +14,7 @@ export const challenges = [
         "expectedOutput": null,
         "starterCode": "'use strict';\n\nconst checkEvenNumber = (number) => {\n  // Створіть та поверніть проміс\n};",
         "difficulty": "easy",
+        "isAsync": true,
         "functionName": "checkEvenNumber",
         "tests": [
             {
@@ -26,7 +27,8 @@ export const challenges = [
             },
             {
                 "input": [7],
-                "expected": "Непарне"
+                "expected": "Непарне",
+                "expectReject": true
             }
         ],
         "theory": {
@@ -57,17 +59,26 @@ export const challenges = [
         "expectedOutput": null,
         "starterCode": "'use strict';\n\nconst handlePromise = (promise) => {\n  // Обробіть проміс за допомогою .then() та .catch()\n};",
         "difficulty": "easy",
+        "isAsync": true,
         "functionName": "handlePromise",
         "tests": [
             {
                 "input": [
-                    "Promise.resolve('Успіх')"
+                    {
+                        "__type": "promise",
+                        "action": "resolve",
+                        "value": "Успіх"
+                    }
                 ],
                 "expected": "Виконано"
             },
             {
                 "input": [
-                    "Promise.reject('Провал')"
+                    {
+                        "__type": "promise",
+                        "action": "reject",
+                        "value": "Провал"
+                    }
                 ],
                 "expected": "Помилка"
             }

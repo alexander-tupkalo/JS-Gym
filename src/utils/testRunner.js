@@ -34,7 +34,164 @@ function deepEqual(a, b) {
     return false;
 }
 
-export function runTests(code, challenge) {
+// ==========================================
+// Вспомогательные функции для async тестов
+// ==========================================
+
+/**
+ * Преобразует специальные входные данные в реальные Promise
+ * Формат: { __type: "promise", action: "resolve"|"reject", value: ... }
+ */
+function resolveInputValue(input) {
+    if (input !== null && typeof input === 'object' && input.__type === 'promise') {
+        if (input.action === 'resolve') {
+            return Promise.resolve(input.value);
+        } else if (input.action === 'reject') {
+            return Promise.reject(input.value);
+        }
+    }
+    return input;
+}
+
+/**
+ * Выполняет один асинхронный тест
+ * Возвращает Promise с результатом теста
+ */
+function runAsyncTest(userFunction, test) {
+    var resolvedInput = test.input.map(resolveInputValue);
+
+    return new Promise(function(resolve) {
+        var promise;
+
+        try {
+            promise = userFunction.apply(null, resolvedInput);
+        } catch (e) {
+            // Синхронная ошибка при вызове функции
+            resolve({
+                passed: false,
+                input: test.input,
+                expected: test.expected,
+                actual: e.name + ': ' + e.message,
+                runtimeError: true
+            });
+            return;
+        }
+
+        // Проверяем что функция вернула именно Promise
+        if (!promise || typeof promise.then !== 'function') {
+            resolve({
+                passed: false,
+                input: test.input,
+                expected: test.expected,
+                actual: String(promise) + ' (не є Promise)',
+                runtimeError: false
+            });
+            return;
+        }
+
+        // Обрабатываем Promise
+        promise
+            .then(function(value) {
+                if (test.expectReject) {
+                    // Ожидали reject, но получили resolve — тест провален
+                    resolve({
+                        passed: false,
+                        input: test.input,
+                        expected: test.expected,
+                        actual: String(value) + ' (очікувався reject)',
+                        runtimeError: false
+                    });
+                } else {
+                    // Ожидали resolve — проверяем значение
+                    var isPassed = deepEqual(value, test.expected);
+                    resolve({
+                        passed: isPassed,
+                        input: test.input,
+                        expected: test.expected,
+                        actual: value
+                    });
+                }
+            })
+            .catch(function(error) {
+                // Извлекаем значение ошибки
+                var errorValue;
+                if (error instanceof Error) {
+                    errorValue = error.message;
+                } else {
+                    errorValue = error;
+                }
+
+                if (test.expectReject) {
+                    // Ожидали reject — проверяем значение ошибки
+                    var isPassed = deepEqual(errorValue, test.expected);
+                    resolve({
+                        passed: isPassed,
+                        input: test.input,
+                        expected: test.expected,
+                        actual: errorValue
+                    });
+                } else {
+                    // Не ожидали reject — тест провален
+                    resolve({
+                        passed: false,
+                        input: test.input,
+                        expected: test.expected,
+                        actual: 'Rejected: ' + String(errorValue),
+                        runtimeError: false
+                    });
+                }
+            });
+    });
+}
+
+/**
+ * Выполняет синхронные тесты (извлечена из оригинального кода)
+ */
+function runSyncTests(userFunction, tests) {
+    var results = [];
+    var passed = 0;
+
+    for (var i = 0; i < tests.length; i++) {
+        var test = tests[i];
+        var actual;
+
+        try {
+            actual = userFunction.apply(null, test.input);
+        } catch (e) {
+            results.push({
+                passed: false,
+                input: test.input,
+                expected: test.expected,
+                actual: e.name + ': ' + e.message,
+                runtimeError: true
+            });
+            continue;
+        }
+
+        var isPassed = deepEqual(actual, test.expected);
+        if (isPassed) passed++;
+
+        results.push({
+            passed: isPassed,
+            input: test.input,
+            expected: test.expected,
+            actual: actual
+        });
+    }
+
+    return {
+        success: passed === tests.length,
+        passed: passed,
+        total: tests.length,
+        tests: results
+    };
+}
+
+// ==========================================
+// Основная функция
+// ==========================================
+
+export async function runTests(code, challenge) {
     if (!challenge.functionName || !challenge.tests || challenge.tests.length === 0) {
         return null;
     }
@@ -49,43 +206,32 @@ export function runTests(code, challenge) {
         var factory = new Function(wrappedCode);
         var userFunction = factory();
 
-        var results = [];
-        var passed = 0;
+        // ==========================================
+        // Async путь (для челленджей с isAsync: true)
+        // ==========================================
+        if (challenge.isAsync) {
+            var asyncResults = await Promise.all(
+                challenge.tests.map(function(test) {
+                    return runAsyncTest(userFunction, test);
+                })
+            );
 
-        for (var i = 0; i < challenge.tests.length; i++) {
-            var test = challenge.tests[i];
-            var actual;
+            var asyncPassed = asyncResults.filter(function(r) {
+                return r.passed;
+            }).length;
 
-            try {
-                actual = userFunction.apply(null, test.input);
-            } catch (e) {
-                results.push({
-                    passed: false,
-                    input: test.input,
-                    expected: test.expected,
-                    actual: e.name + ': ' + e.message,
-                    runtimeError: true
-                });
-                continue;
-            }
-
-            var isPassed = deepEqual(actual, test.expected);
-            if (isPassed) passed++;
-
-            results.push({
-                passed: isPassed,
-                input: test.input,
-                expected: test.expected,
-                actual: actual
-            });
+            return {
+                success: asyncPassed === challenge.tests.length,
+                passed: asyncPassed,
+                total: challenge.tests.length,
+                tests: asyncResults
+            };
         }
 
-        return {
-            success: passed === challenge.tests.length,
-            passed: passed,
-            total: challenge.tests.length,
-            tests: results
-        };
+        // ==========================================
+        // Sync путь (для всех остальных челленджей)
+        // ==========================================
+        return runSyncTests(userFunction, challenge.tests);
 
     } catch (e) {
         if (e.message === '__FN_NOT_FOUND__') {

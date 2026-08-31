@@ -12,6 +12,7 @@ function App() {
   const [view, setView] = useState('home');
   const [activeChallenge, setActiveChallenge] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [theorySidebarOpen, setTheorySidebarOpen] = useState(false);
   const [completedIds, setCompletedIds] = useState(() => {
     try {
       const saved = localStorage.getItem('jsgym-completed');
@@ -37,16 +38,17 @@ function App() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && sidebarOpen) {
-        setSidebarOpen(false);
+      if (e.key === 'Escape') {
+        if (sidebarOpen) setSidebarOpen(false);
+        if (theorySidebarOpen) setTheorySidebarOpen(false);
       }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [sidebarOpen]);
+  }, [sidebarOpen, theorySidebarOpen]);
 
   useEffect(() => {
-    if (sidebarOpen) {
+    if (sidebarOpen || theorySidebarOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -54,7 +56,7 @@ function App() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [sidebarOpen]);
+  }, [sidebarOpen, theorySidebarOpen]);
 
   useEffect(() => {
     localStorage.setItem('jsgym-completed', JSON.stringify(completedIds));
@@ -64,12 +66,10 @@ function App() {
     localStorage.setItem('jsgym-theme', theme);
   }, [theme]);
 
-  // Слушатель для перехода от теории к челленджам
   useEffect(() => {
     const handleGoToChallenges = (e) => {
       const { categoryId } = e.detail;
       setView('training');
-      // Находим первый челлендж этой категории
       const firstChallenge = challenges.find(c => c.category === categoryId);
       if (firstChallenge) {
         setActiveChallenge(firstChallenge);
@@ -81,6 +81,8 @@ function App() {
 
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
   const closeSidebar = () => setSidebarOpen(false);
+  const toggleTheorySidebar = () => setTheorySidebarOpen((prev) => !prev);
+  const closeTheorySidebar = () => setTheorySidebarOpen(false);
   const handleGoHome = () => setView('home');
   const handleGoToTheory = () => setView('theory');
   const handleGoToTraining = () => setView('training');
@@ -110,7 +112,7 @@ function App() {
 
   return (
     <AppLayout 
-      onToggleSidebar={toggleSidebar} 
+      onToggleSidebar={view === 'training' ? toggleSidebar : toggleTheorySidebar}
       onGoHome={handleGoHome} 
       theme={theme} 
       onToggleTheme={toggleTheme}
@@ -126,7 +128,9 @@ function App() {
       ) : view === 'theory' ? (
         <TheoryLayout 
           onGoHome={handleGoHome} 
-          onGoToTraining={handleGoToTraining} 
+          onGoToTraining={handleGoToTraining}
+          sidebarOpen={theorySidebarOpen}
+          onCloseSidebar={closeTheorySidebar}
         />
       ) : (
         <TrainingLayout

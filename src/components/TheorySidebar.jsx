@@ -41,56 +41,62 @@ const categoryIcons = {
     )
 };
 
-function TheorySidebar({ activeCategory, activeTopicId, onSelectCategory, onSelectTopic }) {
+function TheorySidebar({ activeCategory, activeTopicId, onSelectCategory, onSelectTopic, isOpen, onClose }) {
     const topics = theoryData[activeCategory] || [];
 
     return (
-        <aside className="theory-sidebar">
-            <nav className="theory-sidebar-nav">
-                {categoryOrder.map((catId) => {
-                    const isActive = activeCategory === catId;
-                    const catTopics = theoryData[catId] || [];
+        <>
+            <aside className={`theory-sidebar${isOpen ? ' theory-sidebar--open' : ''}`}>
+                <nav className="theory-sidebar-nav">
+                    {categoryOrder.map((catId) => {
+                        const isActive = activeCategory === catId;
+                        const catTopics = theoryData[catId] || [];
 
-                    return (
-                        <div key={catId} className="theory-sidebar-category">
-                            <button
-                                className={`theory-sidebar-category-header${isActive ? ' active' : ''}`}
-                                onClick={() => onSelectCategory(catId)}
-                            >
-                                <span className="theory-sidebar-category-icon">
-                                    {categoryIcons[catId]}
-                                </span>
-                                <span className="theory-sidebar-category-name">
-                                    {categoryNames[catId]}
-                                </span>
-                                <span className="theory-sidebar-category-count">
-                                    {catTopics.length}
-                                </span>
-                            </button>
+                        return (
+                            <div key={catId} className="theory-sidebar-category">
+                                <button
+                                    className={`theory-sidebar-category-header${isActive ? ' active' : ''}`}
+                                    onClick={() => onSelectCategory(catId)}
+                                >
+                                    <span className="theory-sidebar-category-icon">
+                                        {categoryIcons[catId]}
+                                    </span>
+                                    <span className="theory-sidebar-category-name">
+                                        {categoryNames[catId]}
+                                    </span>
+                                    <span className="theory-sidebar-category-count">
+                                        {catTopics.length}
+                                    </span>
+                                </button>
 
-                            {isActive && (
-                                <div className="theory-sidebar-topics">
-                                    {catTopics.map((topic, index) => (
-                                        <button
-                                            key={topic.id}
-                                            className={`theory-sidebar-topic${activeTopicId === topic.id ? ' active' : ''}`}
-                                            onClick={() => onSelectTopic(topic.id)}
-                                        >
-                                            <span className="theory-sidebar-topic-number">
-                                                {index + 1}
-                                            </span>
-                                            <span className="theory-sidebar-topic-title">
-                                                {topic.title}
-                                            </span>
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    );
-                })}
-            </nav>
-        </aside>
+                                {isActive && (
+                                    <div className="theory-sidebar-topics">
+                                        {catTopics.map((topic, index) => (
+                                            <button
+                                                key={topic.id}
+                                                className={`theory-sidebar-topic${activeTopicId === topic.id ? ' active' : ''}`}
+                                                onClick={() => onSelectTopic(topic.id)}
+                                            >
+                                                <span className="theory-sidebar-topic-number">
+                                                    {index + 1}
+                                                </span>
+                                                <span className="theory-sidebar-topic-title">
+                                                    {topic.title}
+                                                </span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </nav>
+            </aside>
+            <div 
+                className={`theory-sidebar-overlay${isOpen ? ' theory-sidebar-overlay--visible' : ''}`}
+                onClick={onClose}
+            />
+        </>
     );
 }
 

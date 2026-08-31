@@ -35,17 +35,17 @@ function Challenge({
     setResult({ type: 'run', ...output });
   };
 
-const handleCheck = () => {
-  const output = runTests(code, challenge);
-  if (output === null) {
-    setResult({ type: 'no-tests' });
-  } else {
-    setResult({ type: 'check', ...output });
-    if (output.success) {
-      onChallengeComplete(challenge.id);
+  const handleCheck = async () => {
+    const output = await runTests(code, challenge);
+    if (output === null) {
+      setResult({ type: 'no-tests' });
+    } else {
+      setResult({ type: 'check', ...output });
+      if (output.success) {
+        onChallengeComplete(challenge.id);
+      }
     }
-  }
-};
+  };
 
   const totalHints = challenge.hints ? challenge.hints.length : 0;
 
