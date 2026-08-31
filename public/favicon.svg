@@ -1,6 +1,6 @@
 <svg xmlns="http://w3.org" viewBox="0 0 32 32">
   <style>
-    :root { --bg: #0d1117; --primary: #e6edf3; --accent: #10b981; }
+    :root { --bg: #0d1117; --primary: #e6edf3; --accent: #2caf84; }
     @media (prefers-color-scheme: light) { :root { --bg: #ffffff; --primary: #1f2328; --accent: #059669; } }
     .bg { fill: var(--bg); transition: fill 0.3s; }
     .code { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
