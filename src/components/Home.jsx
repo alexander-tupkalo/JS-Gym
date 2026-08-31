@@ -29,6 +29,28 @@ function Home({ onStartTraining, onGoToTheory }) {
         </button>
       </section>
 
+      <div className="home-youtube">
+        <div className="home-youtube-content">
+          <span className="home-youtube-emoji">📺</span>
+          <div className="home-youtube-text">
+            <span className="home-youtube-title">Вчись разом з нами</span>
+            <span className="home-youtube-desc">Дивись відео, розбирай JavaScript та прокачуй навички</span>
+          </div>
+        </div>
+        <a
+          className="home-youtube-btn"
+          href="https://www.youtube.com/watch?v=MFoo2q38x9c&list=PL66qhubfOwjbSEqrenz1uAWfPDUNzhqv9"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          YouTube
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </a>
+      </div>
+
       <section className="features">
         <FeatureCard
           icon={

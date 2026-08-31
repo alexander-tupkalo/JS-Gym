@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { challenges } from './data/challenges';
+import { register as authRegister, login as authLogin, getCurrentUser, logout as authLogout, getUserProgress } from './utils/auth';
 import Preloader from './components/Preloader';
 import AppLayout from './components/AppLayout';
 import Home from './components/Home';
@@ -29,6 +30,9 @@ function App() {
     }
   });
 
+  const [user, setUser] = useState(null);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -37,18 +41,30 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+      setUser(currentUser);
+      const userProgress = getUserProgress(currentUser);
+      if (userProgress.length > 0) {
+        setCompletedIds(userProgress);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         if (sidebarOpen) setSidebarOpen(false);
         if (theorySidebarOpen) setTheorySidebarOpen(false);
+        if (authModalOpen) setAuthModalOpen(false);
       }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [sidebarOpen, theorySidebarOpen]);
+  }, [sidebarOpen, theorySidebarOpen, authModalOpen]);
 
   useEffect(() => {
-    if (sidebarOpen || theorySidebarOpen) {
+    if (sidebarOpen || theorySidebarOpen || authModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -56,7 +72,7 @@ function App() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [sidebarOpen, theorySidebarOpen]);
+  }, [sidebarOpen, theorySidebarOpen, authModalOpen]);
 
   useEffect(() => {
     localStorage.setItem('jsgym-completed', JSON.stringify(completedIds));
@@ -94,6 +110,31 @@ function App() {
     setCompletedIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
   };
 
+  const handleLogin = (username, password) => {
+    const result = authLogin(username, password);
+    if (result.success) {
+      setUser(result.user);
+      const userProgress = getUserProgress(result.user);
+      if (userProgress.length > 0) {
+        setCompletedIds(userProgress);
+      }
+    }
+    return result;
+  };
+
+  const handleRegister = (username, password) => {
+    const result = authRegister(username, password);
+    if (result.success) {
+      setUser(result.user);
+    }
+    return result;
+  };
+
+  const handleLogout = () => {
+    authLogout(user, completedIds);
+    setUser(null);
+  };
+
   const handlePrevChallenge = () => {
     if (!activeChallenge) return;
     const idx = challenges.findIndex((c) => c.id === activeChallenge.id);
@@ -119,6 +160,13 @@ function App() {
       view={view}
       onGoToTheory={handleGoToTheory}
       onGoToTraining={handleGoToTraining}
+      user={user}
+      onOpenAuth={() => setAuthModalOpen(true)}
+      onCloseAuth={() => setAuthModalOpen(false)}
+      onLogin={handleLogin}
+      onRegister={handleRegister}
+      onLogout={handleLogout}
+      authModalOpen={authModalOpen}
     >
       {view === 'home' ? (
         <Home 
