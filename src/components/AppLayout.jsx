@@ -1,6 +1,6 @@
 import Header from './Header';
 
-function AppLayout({ children, onToggleSidebar, onGoHome, theme, onToggleTheme }) {
+function AppLayout({ children, onToggleSidebar, onGoHome, theme, onToggleTheme, view, onGoToTheory, onGoToTraining }) {
   return (
     <div className="app" data-theme={theme}>
       <Header
@@ -8,6 +8,9 @@ function AppLayout({ children, onToggleSidebar, onGoHome, theme, onToggleTheme }
         onGoHome={onGoHome}
         theme={theme}
         onToggleTheme={onToggleTheme}
+        view={view}
+        onGoToTheory={onGoToTheory}
+        onGoToTraining={onGoToTraining}
       />
       <main className="app-main">{children}</main>
     </div>

@@ -4,6 +4,7 @@ import Preloader from './components/Preloader';
 import AppLayout from './components/AppLayout';
 import Home from './components/Home';
 import TrainingLayout from './components/TrainingLayout';
+import TheoryLayout from './components/TheoryLayout';
 import './App.css';
 
 function App() {
@@ -63,9 +64,26 @@ function App() {
     localStorage.setItem('jsgym-theme', theme);
   }, [theme]);
 
+  // Слушатель для перехода от теории к челленджам
+  useEffect(() => {
+    const handleGoToChallenges = (e) => {
+      const { categoryId } = e.detail;
+      setView('training');
+      // Находим первый челлендж этой категории
+      const firstChallenge = challenges.find(c => c.category === categoryId);
+      if (firstChallenge) {
+        setActiveChallenge(firstChallenge);
+      }
+    };
+    window.addEventListener('goToChallenges', handleGoToChallenges);
+    return () => window.removeEventListener('goToChallenges', handleGoToChallenges);
+  }, []);
+
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
   const closeSidebar = () => setSidebarOpen(false);
   const handleGoHome = () => setView('home');
+  const handleGoToTheory = () => setView('theory');
+  const handleGoToTraining = () => setView('training');
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
@@ -91,9 +109,25 @@ function App() {
   }
 
   return (
-    <AppLayout onToggleSidebar={toggleSidebar} onGoHome={handleGoHome} theme={theme} onToggleTheme={toggleTheme}>
+    <AppLayout 
+      onToggleSidebar={toggleSidebar} 
+      onGoHome={handleGoHome} 
+      theme={theme} 
+      onToggleTheme={toggleTheme}
+      view={view}
+      onGoToTheory={handleGoToTheory}
+      onGoToTraining={handleGoToTraining}
+    >
       {view === 'home' ? (
-        <Home onStartTraining={() => setView('training')} />
+        <Home 
+          onStartTraining={handleGoToTraining} 
+          onGoToTheory={handleGoToTheory} 
+        />
+      ) : view === 'theory' ? (
+        <TheoryLayout 
+          onGoHome={handleGoHome} 
+          onGoToTraining={handleGoToTraining} 
+        />
       ) : (
         <TrainingLayout
           activeChallenge={activeChallenge}

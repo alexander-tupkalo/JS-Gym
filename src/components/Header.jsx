@@ -1,28 +1,30 @@
-function Header({ onToggleSidebar, onGoHome, theme, onToggleTheme }) {
+function Header({ onToggleSidebar, onGoHome, theme, onToggleTheme, view, onGoToTheory, onGoToTraining }) {
   return (
     <header className="header">
       <div className="header-inner">
         <div className="header-left">
-          <button
-            className="header-toggle"
-            onClick={onToggleSidebar}
-            aria-label="Toggle menu"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          {view === 'training' && (
+            <button
+              className="header-toggle"
+              onClick={onToggleSidebar}
+              aria-label="Toggle menu"
             >
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
-          </button>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
+          )}
           <button className="header-brand" onClick={onGoHome}>
             <span className="header-logo">
               <span className="header-logo--accent">JS</span> Gym
@@ -35,6 +37,18 @@ function Header({ onToggleSidebar, onGoHome, theme, onToggleTheme }) {
         </div>
 
         <div className="header-right">
+          <button
+            className={`header-nav-btn${view === 'theory' ? ' active' : ''}`}
+            onClick={onGoToTheory}
+          >
+            Теорія
+          </button>
+          <button
+            className={`header-nav-btn${view === 'training' ? ' active' : ''}`}
+            onClick={onGoToTraining}
+          >
+            Завдання
+          </button>
           <div className="header-lang-switch">
             <button className="header-lang-btn header-lang-btn--active">
               UA
@@ -60,7 +74,7 @@ function Header({ onToggleSidebar, onGoHome, theme, onToggleTheme }) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7.5 7.5 0 0 0-9.79-11.79A9 9 0 0 1 12.79 21.21A9 9 0 0 1 21.21 12.79z" />
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 9.79 11.79A9 9 0 0 1 21 12.79z" />
               </svg>
             ) : (
               <svg

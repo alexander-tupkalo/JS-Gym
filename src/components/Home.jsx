@@ -4,12 +4,12 @@ const categories = [
   { name: 'Основи JavaScript', count: 10 },
   { name: 'Масиви', count: 10 },
   { name: 'Функції', count: 10 },
-  { name: "Об'єкти", soon: true },
-  { name: 'ES6+', soon: true },
-  { name: 'Async JavaScript', soon: true },
+  { name: "Об'єкти", count: 7 },
+  { name: 'ES6+', count: 5},
+  { name: 'Async JavaScript', count: 2 },
 ];
 
-function Home({ onStartTraining }) {
+function Home({ onStartTraining, onGoToTheory }) {
   return (
     <div className="home">
       <section className="hero">

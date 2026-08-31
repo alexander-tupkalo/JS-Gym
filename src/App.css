@@ -1221,6 +1221,402 @@
   color: #fca5a5;
 }
 
+/* ========== THEORY LAYOUT ========== */
+
+.theory-layout {
+  display: flex;
+  min-height: calc(100vh - var(--header-height));
+}
+
+/* ========== THEORY SIDEBAR ========== */
+
+.theory-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  background-color: var(--bg-primary);
+  overflow-y: auto;
+  padding: 12px 0;
+}
+
+.theory-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.theory-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.theory-sidebar::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 4px;
+}
+
+.theory-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.theory-sidebar-category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: left;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.theory-sidebar-category-header:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-card);
+}
+
+.theory-sidebar-category-header.active {
+  color: var(--accent);
+  background-color: var(--accent-dim);
+}
+
+.theory-sidebar-category-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.theory-sidebar-category-header.active .theory-sidebar-category-icon {
+  color: var(--accent);
+}
+
+.theory-sidebar-category-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.theory-sidebar-category-count {
+  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background-color: var(--bg-secondary);
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+
+.theory-sidebar-topics {
+  padding: 4px 12px 8px;
+}
+
+.theory-sidebar-topic {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  text-align: left;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.theory-sidebar-topic:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-card);
+}
+
+.theory-sidebar-topic.active {
+  color: var(--accent);
+  background-color: var(--accent-dim);
+}
+
+.theory-sidebar-topic-number {
+  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  min-width: 18px;
+  flex-shrink: 0;
+}
+
+.theory-sidebar-topic.active .theory-sidebar-topic-number {
+  color: var(--accent);
+}
+
+.theory-sidebar-topic-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ========== THEORY CONTENT ========== */
+
+.theory-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 48px;
+}
+
+.theory-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  gap: 16px;
+}
+
+.theory-placeholder-icon {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.theory-placeholder-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.theory-placeholder-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* ========== THEORY TOPIC ========== */
+
+.theory-topic {
+  max-width: 800px;
+}
+
+.theory-topic-header {
+  margin-bottom: 32px;
+}
+
+.theory-topic-category {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent);
+  background-color: var(--accent-dim);
+  padding: 4px 10px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+.theory-topic-title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.theory-topic-content {
+  margin-bottom: 28px;
+}
+
+.theory-topic-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.theory-topic-section {
+  margin-bottom: 28px;
+}
+
+.theory-topic-section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.theory-topic-code {
+  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+}
+
+.theory-topic-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 0;
+}
+
+.theory-topic-note {
+  display: flex;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.theory-topic-note-bullet {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ========== THEORY TOPIC ACTION ========== */
+
+.theory-topic-action {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.theory-topic-go-to-challenges {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+  background-color: var(--accent-dim);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.theory-topic-go-to-challenges:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+/* ========== THEORY TOPIC NAVIGATION ========== */
+
+.theory-topic-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+}
+
+.theory-topic-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.theory-topic-nav-btn:hover:not(:disabled) {
+  color: var(--text-primary);
+  border-color: var(--border-light);
+  background-color: var(--bg-card-hover);
+}
+
+.theory-topic-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.theory-topic-nav-btn svg {
+  flex-shrink: 0;
+}
+
+/* ========== HEADER NAV BUTTONS ========== */
+
+.header-nav-btn {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.header-nav-btn:hover {
+  color: var(--text-secondary);
+  background-color: var(--bg-card);
+}
+
+.header-nav-btn.active {
+  color: var(--accent);
+  background-color: var(--accent-dim);
+}
+
+/* ========== THEORY RESPONSIVE ========== */
+
+@media (max-width: 768px) {
+  .theory-sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    z-index: 90;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    border-right: 1px solid var(--border);
+  }
+
+  .theory-sidebar--open {
+    transform: translateX(0);
+  }
+
+  .theory-content {
+    padding: 24px 20px;
+  }
+
+  .theory-topic-title {
+    font-size: 1.4rem;
+  }
+
+  .theory-topic-code {
+    font-size: 0.78rem;
+    padding: 16px;
+  }
+
+  .header-nav-btn {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .theory-content {
+    padding: 20px 16px;
+  }
+
+  .theory-topic-code {
+    padding: 12px 14px;
+  }
+}
+
+/* ========== LIGHT THEME THEORY OVERRIDES ========== */
+
+[data-theme="light"] .theory-topic-code {
+  background-color: #1e293b;
+  border-color: #2d3748;
+  color: #e2e8f0;
+}
+
 /* ========== RESPONSIVE ========== */
 
 @media (max-width: 768px) {
