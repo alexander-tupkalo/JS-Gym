@@ -407,7 +407,7 @@
   width: 100%;
   padding: 10px 16px;
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 600;
   text-align: left;
   transition: color 0.15s ease, background-color 0.15s ease;
@@ -473,7 +473,7 @@
   padding: 8px 12px;
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   text-align: left;
   transition: color 0.15s ease, background-color 0.15s ease;
 }
@@ -1264,7 +1264,7 @@
   width: 100%;
   padding: 10px 16px;
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 600;
   text-align: left;
   transition: color 0.15s ease, background-color 0.15s ease;
@@ -1319,7 +1319,7 @@
   padding: 8px 12px;
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   text-align: left;
   transition: color 0.15s ease, background-color 0.15s ease;
 }
@@ -1543,7 +1543,7 @@
 /* ========== HEADER NAV BUTTONS ========== */
 
 .header-nav-btn {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-muted);
   padding: 6px 12px;
@@ -1594,7 +1594,7 @@
   }
 
   .header-nav-btn {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     padding: 5px 8px;
   }
 }
